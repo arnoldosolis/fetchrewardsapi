@@ -64,50 +64,76 @@ router.post("/", (req, res) => {
 });
 
 // Returns key with lowest value
-function lowestValue(obj) {
-  var [lowestItems] = Object.entries(obj).sort(([, v1], [, v2]) => v1 - v2);
-  return lowestItems[0];
+function oldestDate(obj) {
+  let oldestKey;
+  let oldestVal;
+  let i = 0;
+  obj.forEach((key, val) => {
+    var d1 = new Date(oldestKey);
+    var d2 = new Date(key);
+    if (i == 0) {
+      oldestKey = key;
+      oldestVal = val;
+      i = 1;
+    } else if (d2 < d1) {
+      oldestKey = key;
+      oldestVal = val;
+    } else {
+    }
+  });
+  return [oldestKey, oldestVal];
 }
 
 // Spend points
 // Rules:
 // 1. Oldest points must be spent first (based on transaction timestamp)
 // 2. No payer's points should go to negative
-router.patch("/", (req, res) => {
+router.post("/spend", (req, res) => {
   var points = req.body;
 
-  const payerBalance = new Map();
-  example.forEach((element) => {
-    if (payerBalance.get(element.payer) === undefined) {
-      payerBalance.set(element.payer, element.points);
-    } else {
-      let prevPoints = payerBalance.get(element.payer);
-      payerBalance.delete(element.payer);
-      payerBalance.set(element.payer, prevPoints + element.points);
-    }
-  });
-
+  // Will be used to find oldest points
   const payerTimestamp = new Map();
   example.forEach((element) => {
     if (payerTimestamp.get(element.payer) === undefined) {
-      payerTimestamp.set(element.payer, element.timestamp);
+      payerTimestamp.set(element.payer, element.timestamp.substring(0, 10));
     } else {
       var d1 = new Date(payerTimestamp.get(element.payer));
       var d2 = new Date(element.timestamp);
       if (d1 > d2) {
         payerTimestamp.delete(element.payer);
-        payerTimestamp.set(element.payer, element.timestamp);
+        payerTimestamp.set(element.payer, element.timestamp.substring(0, 10));
       }
     }
   });
-  while (points !== 0 || payerBalance.size() !== 0) {
-    let oldestPoints = lowestValue(payerTimestamp);
-    if (points > payerBalance.get(oldestPoints)) {
-      payerBalance.delete();
+  // Will be used to return balance
+  const payerBalance = new Map();
+  example.forEach((element) => {
+    if (payerBalance.get(element.payer) === undefined) {
+      let sum = 0;
+      for (let i = 0; i < example.length; i++) {
+        if (
+          example[i].timestamp.substring(0, 10) ===
+            payerTimestamp.get(element.payer) &&
+          example[i].payer === element.payer
+        ) {
+          sum += example[i].points;
+        }
+      }
+      payerBalance.set(element.payer, sum);
+      console.log(sum);
     }
-  }
+  });
+
+  //  while (points !== 0 || payerBalance.size() !== 0) {
+  //    if (points > payerBalance.get(oldestPoints)) {
+  //      payerBalance.delete(oldestPoints);
+  //      payerBalance.set(oldestPoints);
+  //    }
+  //    break;
+  //  }
   // converts map to json
   const obj = Object.fromEntries(payerBalance);
+  console.log(obj);
   res.send(obj);
 });
 
