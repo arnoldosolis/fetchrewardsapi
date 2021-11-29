@@ -63,34 +63,13 @@ router.post("/", (req, res) => {
   res.send(transaction);
 });
 
-// Returns key with lowest value
-function oldestDate(obj) {
-  let oldestKey;
-  let oldestVal;
-  let i = 0;
-  obj.forEach((key, val) => {
-    var d1 = new Date(oldestKey);
-    var d2 = new Date(key);
-    if (i == 0) {
-      oldestKey = key;
-      oldestVal = val;
-      i = 1;
-    } else if (d2 < d1) {
-      oldestKey = key;
-      oldestVal = val;
-    } else {
-    }
-  });
-  return [oldestKey, oldestVal];
-}
-
 // Spend points
 // Rules:
 // 1. Oldest points must be spent first (based on transaction timestamp)
 // 2. No payer's points should go to negative
 router.post("/spend", (req, res) => {
-  var points = req.body;
-
+  var p = req.body.points;
+  console.log(p);
   // Will be used to find oldest points
   const payerTimestamp = new Map();
   example.forEach((element) => {
@@ -120,17 +99,33 @@ router.post("/spend", (req, res) => {
         }
       }
       payerBalance.set(element.payer, sum);
-      console.log(sum);
     }
   });
 
-  //  while (points !== 0 || payerBalance.size() !== 0) {
-  //    if (points > payerBalance.get(oldestPoints)) {
-  //      payerBalance.delete(oldestPoints);
-  //      payerBalance.set(oldestPoints);
-  //    }
-  //    break;
-  //  }
+  payerBalance.forEach((key, val) => {
+    console.log(key, val);
+    if (p > key) {
+      p -= key;
+      payerBalance.set(val, -key);
+      let someDate = new Date().toLocaleDateString();
+      const transaction = {
+        payer: val,
+        points: -key,
+        timestamp: someDate,
+      };
+      example.push(transaction);
+    } else {
+      payerBalance.set(val, -p);
+      let someDate = new Date().toLocaleDateString();
+      const transaction = {
+        payer: val,
+        points: -p,
+        timestamp: someDate,
+      };
+      example.push(transaction);
+    }
+  });
+
   // converts map to json
   const obj = Object.fromEntries(payerBalance);
   console.log(obj);
