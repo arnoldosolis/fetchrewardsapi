@@ -125,7 +125,10 @@ router.post("/spend", (req, res) => {
       example.push(transaction);
     }
   });
-
+  // In the case that there are spare points let user know
+  if (p > 0) {
+    payerBalance.set("Remaining Points: ", p);
+  }
   // converts map to json
   const obj = Object.fromEntries(payerBalance);
   console.log(obj);
