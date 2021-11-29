@@ -25,7 +25,7 @@ cd fetchrewardsapi
 
 npm install
 
-Then finally, run the service by typing in:
+4. Then finally, run the service by typing in:
 
 node server.js 
 
