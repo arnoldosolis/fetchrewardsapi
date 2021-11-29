@@ -69,7 +69,6 @@ router.post("/", (req, res) => {
 // 2. No payer's points should go to negative
 router.post("/spend", (req, res) => {
   var p = req.body.points;
-  console.log(p);
   // Will be used to find oldest points
   const payerTimestamp = new Map();
   example.forEach((element) => {
@@ -103,7 +102,6 @@ router.post("/spend", (req, res) => {
   });
 
   payerBalance.forEach((key, val) => {
-    console.log(key, val);
     if (p > key) {
       p -= key;
       payerBalance.set(val, -key);
@@ -123,6 +121,7 @@ router.post("/spend", (req, res) => {
         timestamp: someDate,
       };
       example.push(transaction);
+      p -= p;
     }
   });
   // In the case that there are spare points let user know
@@ -131,7 +130,6 @@ router.post("/spend", (req, res) => {
   }
   // converts map to json
   const obj = Object.fromEntries(payerBalance);
-  console.log(obj);
   res.send(obj);
 });
 
