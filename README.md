@@ -72,10 +72,39 @@ To send a data to the route you must navigate to the Body tab look below and cli
 
 You will then see another row of options: click on raw and then you will see a new option to the far end of that row that says "Text". Click on it and Select JSON.
 
-![](images/6.png)
+![](images/7.png)
 
-You can now send data to make your life easy you can copy paste the example from below:
+You can now send data to make your life easy you can copy paste the example from below directly into that text box and then in the top right corner click send:
 
 Example:
 {"payer": "COKE", "points": 1000, "timestamp": "2020-11-02T14:00:00Z" }
 
+If we look back at our web browser you will notice that it works:
+
+![](images/8.png)
+
+#### NOTE: You will also notice that we get the response we needed in postman.
+
+Now to test our final route.
+NOTE: I will be restarting my node server so that you see the output required from the problem naturally it will work regardless this is just for the purpose of demonstration.
+
+You will want to append /spent at the end of localhost:3001/points
+So in the address bar inside postman you should have:
+
+localhost:3001/points/spent
+
+Use this example given from the PDF:
+
+Example: 
+{ "points": 5000 }
+
+Now you just click send in the top right corner. 
+
+![](images/9.png)
+
+#### NOTE: You will also notice that we get the response we needed in postman.
+
+Now to check if everything is up to date we can look at our browser one last time.
+![](images/10.png)
+
+If you have any questions please don't hesitate to reach out to me @ arnoldosolis817@gmail.com

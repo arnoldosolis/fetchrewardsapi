@@ -67,7 +67,7 @@ router.post("/", (req, res) => {
 // Rules:
 // 1. Oldest points must be spent first (based on transaction timestamp)
 // 2. No payer's points should go to negative
-router.post("/spend", (req, res) => {
+router.post("/spent", (req, res) => {
   var p = req.body.points;
   // Will be used to find oldest points
   const payerTimestamp = new Map();
