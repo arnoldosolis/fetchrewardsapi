@@ -1,5 +1,5 @@
 # fetchrewardsapi
-##For for this exercise I used Node and its package express. For testing the routes I used postman.
+###For for this exercise I used Node and its package express. For testing the routes I used postman.
 
 ### Things to install first:
 First install Node(LTS version): 
